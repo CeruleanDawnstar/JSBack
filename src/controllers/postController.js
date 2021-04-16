@@ -1,5 +1,7 @@
 const Post = require('../models/postModel');
 
+const spaceXApiProvider = require('../providers/spaceXApiProvider');
+
 exports.listAllPosts = (req, res) => {
     Post.find({}, (error, posts) => {
         if (error) {
@@ -18,17 +20,36 @@ exports.listAllPosts = (req, res) => {
 exports.createAPost = (req, res) => {
     let newPost = new Post(req.body);
 
-    newPost.save((error, post) => {
-        if (error) {
-            res.status(500);
-            console.log(error);
-            res.json({
-                message: "Erreur serveur."
-            });
-        } else {
-            res.status(201);
-            res.json(post);
+    // let lastMission = spaceXApiProvider.getLastMission();
+    let lastLaunche = spaceXApiProvider.getLastLaunche();
+
+    // lastMission.then(response => {
+    lastLaunche.then(response => {
+
+
+
+
+        if (!newPost.content) {
+            console.log(response)
+            // newPost.content = response.description;
+            newPost.content = response.details;
         }
+
+        newPost.save((error, post) => {
+            if (error) {
+                res.status(500);
+                console.log(error);
+                res.json({
+                    message: "Erreur serveur."
+                });
+            } else {
+                res.status(201);
+                res.json(post);
+            }
+        });
+
+
+        
     });
 }
 
