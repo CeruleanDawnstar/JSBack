@@ -1,6 +1,3 @@
-const {
-    findByIdAndUpdate
-} = require('../models/postModel');
 const Post = require('../models/postModel');
 
 exports.listAllPosts = (req, res) => {
