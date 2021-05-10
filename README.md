@@ -27,3 +27,7 @@ docker-compose logs -f
 ```
 docker-compose exec node /bin/sh
 ```
+
+## Environment variable
+- Rename .env.sample to .env
+- Add a key for JWT_KEY on this file

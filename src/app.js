@@ -12,6 +12,9 @@ const bodyParser = require('body-parser');
 server.use(bodyParser.urlencoded());
 server.use(bodyParser.json());
 
+const userRoute = require('./routes/userRoute');
+userRoute(server);
+
 const postRoute = require('./routes/postRoute');
 postRoute(server);
 
