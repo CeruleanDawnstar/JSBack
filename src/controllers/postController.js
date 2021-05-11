@@ -1,24 +1,38 @@
 const Post = require('../models/postModel');
+const User = require('../models/userModel');
 
 const spaceXApiProvider = require('../providers/spaceXApiProvider');
+const { userLogin } = require('./userController');
 
 exports.listAllPosts = (req, res) => {
-    Post.find({}, (error, posts) => {
-        if (error) {
-            res.status(500);
-            console.log(error);
-            res.json({
-                message: "Erreur serveur."
-            });
-        } else {
-            res.status(200);
-            res.json(posts);
-        }
-    });
+
+    // Tahir : si l'utilisateur est loggé...
+    if(User.role === user || admin) {
+
+        Post.find({}, (error, posts) => {
+            if (error) {
+                res.status(500);
+                console.log(error);
+                res.json({
+                    message: "Erreur serveur."
+                });
+            } else {
+                res.status(200);
+                res.json(posts);
+            }
+        });
+
+    }
+
+    
 }
 
 exports.createAPost = (req, res) => {
-    let newPost = new Post(req.body);
+
+    // Tahir : si l'utilisateur est admin...
+    if(User.role === admin) {
+
+        let newPost = new Post(req.body);
 
     // let lastMission = spaceXApiProvider.getLastMission();
     let lastLaunche = spaceXApiProvider.getLastLaunche();
@@ -51,6 +65,10 @@ exports.createAPost = (req, res) => {
 
         
     });
+
+    }
+
+    
 }
 
 exports.getAPost = (req, res) => {
