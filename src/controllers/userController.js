@@ -1,23 +1,32 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 exports.userRegister = (req, res) => {
     let newUser = new User(req.body);
 
-    newUser.save((error, user) => {
-        if (error) {
-            res.status(500);
-            console.log(error);
-            res.json({
-                message: "Erreur serveur."
-            });
-        } else {
-            res.status(201);
-            res.json({
-                message: `Utilisateur crée : ${user.email}`
-            });
-        }
+    // Tahir : ajout du cryptage de mdp
+    bcrypt.hash(User.password, saltRounds, function(err, hash) {
+        
+        newUser.save((error, user) => {
+            if (error) {
+                res.status(500);
+                console.log(error);
+                res.json({
+                    message: "Erreur serveur."
+                });
+            } else {
+                res.status(201);
+                res.json({
+                    message: `Utilisateur crée : ${user.email}`
+                });
+            }
+        });
+
     });
+
+    
 }
 
 exports.userLogin = (req, res) => {
